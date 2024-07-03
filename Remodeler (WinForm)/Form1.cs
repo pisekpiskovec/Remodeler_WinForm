@@ -92,7 +92,7 @@ namespace Remodeler_WinForm
             {
                 if (files.Count <= 0 || Settings.Default.ffmpegPath.Length == 0) return;
                 string inputFile = files[lbFiles.SelectedIndex] ?? files[0];
-                string outputFile = Path.Combine(tbOutput.Text, Path.ChangeExtension(Path.GetFileName(inputFile), ".mp4"));
+                string outputFile = Path.Combine(tbOutput.Text ?? Path.GetDirectoryName(inputFile), Path.ChangeExtension(Path.GetFileName(inputFile), ".mp4"));
                 string exec = $"-i \"{inputFile}\" -c:v copy -c:a aac -strict experimental \"{outputFile}\"";
                 Process cmd = new Process();
                 cmd.StartInfo.FileName = Settings.Default.ffmpegPath;
