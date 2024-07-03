@@ -83,7 +83,7 @@ namespace Remodeler_WinForm
             cmd.Start();
             cmd.WaitForExit();
             MessageBox.Show($"{outputFile} successfully converted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            if(Settings.Default.inputDelete) File.Delete(inputFile);
+            if (Settings.Default.inputDelete) File.Delete(inputFile);
         }
 
         private void bOutputList_Click(object sender, EventArgs e)
@@ -104,5 +104,8 @@ namespace Remodeler_WinForm
                 if (Settings.Default.inputDelete) File.Delete(inputFile);
             }
         }
+
+        private void tbFfmpeg_TextChanged(object sender, EventArgs e) { Settings.Default.ffmpegPath = tbFfmpeg.Text; Settings.Default.Save(); }
+        private void tbOutput_TextChanged(object sender, EventArgs e) { Settings.Default.outputPath = tbOutput.Text; Settings.Default.Save(); }
     }
 }

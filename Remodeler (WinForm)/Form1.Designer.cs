@@ -67,6 +67,7 @@
             tbFfmpeg.Name = "tbFfmpeg";
             tbFfmpeg.Size = new Size(141, 23);
             tbFfmpeg.TabIndex = 2;
+            tbFfmpeg.TextChanged += tbFfmpeg_TextChanged;
             // 
             // lbFiles
             // 
@@ -83,6 +84,7 @@
             tbOutput.Name = "tbOutput";
             tbOutput.Size = new Size(146, 23);
             tbOutput.TabIndex = 9;
+            tbOutput.TextChanged += tbOutput_TextChanged;
             // 
             // bOutput
             // 
