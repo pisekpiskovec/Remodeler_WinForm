@@ -36,10 +36,7 @@ namespace Remodeler_WinForm
             OpenFileDialog openSingle = new OpenFileDialog();
             openSingle.Filter = "TS|*.ts";
             openSingle.DefaultExt = ".ts";
-            if (openSingle.ShowDialog() == DialogResult.OK)
-            {
-                files.Add(openSingle.FileName);
-            }
+            if (openSingle.ShowDialog() == DialogResult.OK) files.Add(openSingle.FileName);
         }
 
         private void bInputFolder_Click(object sender, EventArgs e)
@@ -64,12 +61,7 @@ namespace Remodeler_WinForm
             }
         }
 
-        private void chbDeleteConverted_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.Default.inputDelete = chbDeleteConverted.Checked;
-            Settings.Default.Save();
-        }
-
+        private void chbDeleteConverted_CheckedChanged(object sender, EventArgs e) { Settings.Default.inputDelete = chbDeleteConverted.Checked; Settings.Default.Save(); }
         private void bOutputSingle_Click(object sender, EventArgs e)
         {
             if (files.Count <= 0 || Settings.Default.ffmpegPath.Length == 0) return;
