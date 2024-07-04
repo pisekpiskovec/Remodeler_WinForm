@@ -66,6 +66,7 @@ namespace Remodeler_WinForm
         private void chbDeleteConverted_CheckedChanged(object sender, EventArgs e) { Settings.Default.inputDelete = chbDeleteConverted.Checked; Settings.Default.Save(); }
         private void bOutputSingle_Click(object sender, EventArgs e)
         {
+            this.Enabled = false;
             if (files.Count <= 0 || Settings.Default.ffmpegPath.Length == 0) return;
             string inputFile = files[lbFiles.SelectedIndex] ?? files[0];
             string outputFile = Path.Combine(tbOutput.Text, Path.ChangeExtension(Path.GetFileName(inputFile), ".mp4"));
@@ -79,12 +80,13 @@ namespace Remodeler_WinForm
             cmd.WaitForExit();
             MessageBox.Show($"{outputFile} successfully converted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             if (Settings.Default.inputDelete) File.Delete(inputFile);
-            proccessRunning = false;
+            this.Enabled = true;
             processRunning = false;
         }
 
         private void bOutputList_Click(object sender, EventArgs e)
         {
+            this.Enabled = false;
             foreach (var file in files)
             {
                 if (files.Count <= 0 || Settings.Default.ffmpegPath.Length == 0) return;
@@ -102,6 +104,7 @@ namespace Remodeler_WinForm
                 if (Settings.Default.inputDelete) File.Delete(inputFile);
             }
             proccessRunning = false;
+            this.Enabled = true;
             processRunning = false;
         }
 
