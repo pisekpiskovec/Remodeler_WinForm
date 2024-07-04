@@ -181,6 +181,7 @@
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Remodeler";
+            FormClosing += Form1_FormClosing;
             ResumeLayout(false);
             PerformLayout();
         }

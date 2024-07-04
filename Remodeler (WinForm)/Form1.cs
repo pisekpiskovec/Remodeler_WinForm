@@ -5,6 +5,8 @@ namespace Remodeler_WinForm
     public partial class Form1 : Form
     {
         BindingList<string> files = new BindingList<string>();
+        Process cmd = new Process();
+        bool proccessRunning = false;
 
         public Form1()
         {
@@ -73,9 +75,11 @@ namespace Remodeler_WinForm
             cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             cmd.StartInfo.Arguments = exec;
             cmd.Start();
+            proccessRunning = true;
             cmd.WaitForExit();
             MessageBox.Show($"{outputFile} successfully converted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             if (Settings.Default.inputDelete) File.Delete(inputFile);
+            proccessRunning = false;
         }
 
         private void bOutputList_Click(object sender, EventArgs e)
@@ -91,13 +95,25 @@ namespace Remodeler_WinForm
                 cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 cmd.StartInfo.Arguments = exec;
                 cmd.Start();
+                proccessRunning = true;
                 cmd.WaitForExit();
                 MessageBox.Show($"{outputFile} successfully converted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 if (Settings.Default.inputDelete) File.Delete(inputFile);
             }
+            proccessRunning = false;
         }
 
         private void tbFfmpeg_TextChanged(object sender, EventArgs e) { Settings.Default.ffmpegPath = tbFfmpeg.Text; Settings.Default.Save(); }
         private void tbOutput_TextChanged(object sender, EventArgs e) { Settings.Default.outputPath = tbOutput.Text; Settings.Default.Save(); }
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (proccessRunning)
+            {
+                var dialog = MessageBox.Show("Conversion is still in progress. Are you sure you want to exit the program?", "Conversion still in progress", MessageBoxButtons.YesNo, MessageBoxIcon.Stop);
+                if (dialog == DialogResult.Yes) cmd.Close();
+                else e.Cancel = dialog == DialogResult.No;
+            }
+        }
+
     }
 }
