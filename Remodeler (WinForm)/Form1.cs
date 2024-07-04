@@ -91,7 +91,7 @@ namespace Remodeler_WinForm
             foreach (var file in files)
             {
                 if (files.Count <= 0 || Settings.Default.ffmpegPath.Length == 0) return;
-                string inputFile = files[lbFiles.SelectedIndex] ?? files[0];
+                string inputFile = file;
                 if (!File.Exists(inputFile)) return;
                 string outputFile = Path.Combine(tbOutput.Text ?? Path.GetDirectoryName(inputFile), Path.ChangeExtension(Path.GetFileName(inputFile), ".mp4"));
                 string exec = $"-i \"{inputFile}\" -c:v copy -c:a aac -strict experimental \"{outputFile}\"";
