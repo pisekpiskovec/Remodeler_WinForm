@@ -69,6 +69,7 @@ namespace Remodeler_WinForm
             this.Enabled = false;
             if (files.Count <= 0 || Settings.Default.ffmpegPath.Length == 0) return;
             string inputFile = files[lbFiles.SelectedIndex] ?? files[0];
+            if (!File.Exists(inputFile)) return;
             string outputFile = Path.Combine(tbOutput.Text, Path.ChangeExtension(Path.GetFileName(inputFile), ".mp4"));
             string exec = $"-i \"{inputFile}\" -c:v copy -c:a aac -strict experimental \"{outputFile}\"";
             Process cmd = new Process();
@@ -79,7 +80,7 @@ namespace Remodeler_WinForm
             processRunning = true;
             cmd.WaitForExit();
             MessageBox.Show($"{outputFile} successfully converted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            if (Settings.Default.inputDelete) File.Delete(inputFile);
+            if (Settings.Default.inputDelete) { File.Delete(inputFile); files.Remove(inputFile); }
             this.Enabled = true;
             processRunning = false;
         }
@@ -91,6 +92,7 @@ namespace Remodeler_WinForm
             {
                 if (files.Count <= 0 || Settings.Default.ffmpegPath.Length == 0) return;
                 string inputFile = files[lbFiles.SelectedIndex] ?? files[0];
+                if (!File.Exists(inputFile)) return;
                 string outputFile = Path.Combine(tbOutput.Text ?? Path.GetDirectoryName(inputFile), Path.ChangeExtension(Path.GetFileName(inputFile), ".mp4"));
                 string exec = $"-i \"{inputFile}\" -c:v copy -c:a aac -strict experimental \"{outputFile}\"";
                 Process cmd = new Process();
@@ -103,7 +105,7 @@ namespace Remodeler_WinForm
                 MessageBox.Show($"{outputFile} successfully converted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 if (Settings.Default.inputDelete) File.Delete(inputFile);
             }
-            proccessRunning = false;
+            files.Clear();
             this.Enabled = true;
             processRunning = false;
         }
