@@ -70,7 +70,7 @@ namespace Remodeler_WinForm
             if (files.Count <= 0 || Settings.Default.ffmpegPath.Length == 0) return;
             string inputFile = files[lbFiles.SelectedIndex] ?? files[0];
             if (!File.Exists(inputFile)) return;
-            string outputFile = Path.Combine(tbOutput.Text, Path.ChangeExtension(Path.GetFileName(inputFile), ".mp4"));
+            string outputFile = Path.Combine(String.IsNullOrEmpty(tbOutput.Text) ? Path.GetDirectoryName(inputFile) : tbOutput.Text, Path.ChangeExtension(Path.GetFileName(inputFile), ".mp4"));
             string exec = $"-i \"{inputFile}\" -c:v copy -c:a aac -strict experimental \"{outputFile}\"";
             cmd.StartInfo.FileName = Settings.Default.ffmpegPath;
             cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -78,8 +78,11 @@ namespace Remodeler_WinForm
             cmd.Start();
             processRunning = true;
             cmd.WaitForExit();
-            MessageBox.Show($"{outputFile} successfully converted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            if (Settings.Default.inputDelete) { File.Delete(inputFile); files.Remove(inputFile); }
+            if (cmd.ExitCode == 0)
+            {
+                MessageBox.Show($"{outputFile} successfully converted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (Settings.Default.inputDelete) { File.Delete(inputFile); files.Remove(inputFile); }
+            }
             this.Enabled = true;
             processRunning = false;
         }
@@ -92,18 +95,20 @@ namespace Remodeler_WinForm
                 if (files.Count <= 0 || Settings.Default.ffmpegPath.Length == 0) return;
                 string inputFile = file;
                 if (!File.Exists(inputFile)) return;
-                string outputFile = Path.Combine(tbOutput.Text ?? Path.GetDirectoryName(inputFile), Path.ChangeExtension(Path.GetFileName(inputFile), ".mp4"));
-                string exec = $"-i \"{inputFile}\" -c:v copy -c:a aac -strict experimental \"{outputFile}\"";
+                string outputFile = Path.Combine(String.IsNullOrEmpty(tbOutput.Text) ? Path.GetDirectoryName(inputFile) : tbOutput.Text, Path.ChangeExtension(Path.GetFileName(inputFile), ".mp4"));
+                string exec = $"-i \"{inputFile}\" -c:v copy -c:a aac -strict experimental \"{outputFile}\"";                
                 cmd.StartInfo.FileName = Settings.Default.ffmpegPath;
                 cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                 cmd.StartInfo.Arguments = exec;
                 cmd.Start();
                 processRunning = true;
                 cmd.WaitForExit();
-                MessageBox.Show($"{outputFile} successfully converted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                if (Settings.Default.inputDelete) File.Delete(inputFile);
+                if(cmd.ExitCode == 0)
+                {
+                    MessageBox.Show($"{outputFile} successfully converted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (Settings.Default.inputDelete) { File.Delete(inputFile); files.Remove(inputFile); }
+                }
             }
-            files.Clear();
             this.Enabled = true;
             processRunning = false;
         }
@@ -119,6 +124,5 @@ namespace Remodeler_WinForm
                 else e.Cancel = dialog == DialogResult.No;
             }
         }
-
     }
 }
