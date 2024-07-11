@@ -1,3 +1,4 @@
+using Microsoft.Toolkit.Uwp.Notifications;
 using System.Diagnostics;
 
 namespace Remodeler_WinForm
@@ -80,7 +81,10 @@ namespace Remodeler_WinForm
             cmd.WaitForExit();
             if (cmd.ExitCode == 0)
             {
-                MessageBox.Show($"{outputFile} successfully converted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                new ToastContentBuilder()
+                    .AddText("Success")
+                    .AddText($"{outputFile} successfully converted.");
+                //MessageBox.Show($"{outputFile} successfully converted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 if (Settings.Default.inputDelete) { File.Delete(inputFile); files.Remove(inputFile); }
             }
             this.Enabled = true;
@@ -105,7 +109,10 @@ namespace Remodeler_WinForm
                 cmd.WaitForExit();
                 if(cmd.ExitCode == 0)
                 {
-                    MessageBox.Show($"{outputFile} successfully converted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    new ToastContentBuilder()
+                        .AddText("Success")
+                        .AddText($"{outputFile} successfully converted.");
+                    //MessageBox.Show($"{outputFile} successfully converted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     if (Settings.Default.inputDelete) { File.Delete(inputFile); files.Remove(inputFile); }
                 }
             }
