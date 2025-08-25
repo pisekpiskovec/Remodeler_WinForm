@@ -36,8 +36,8 @@ namespace Remodeler_WinForm
         private void bInputSingle_Click(object sender, EventArgs e)
         {
             OpenFileDialog openSingle = new OpenFileDialog();
-            openSingle.Filter = "TS|*.ts";
-            openSingle.DefaultExt = ".ts";
+            if (rbTS_to_MP4.Checked) openSingle.Filter = "TS|*.ts";
+            else if (rbDAV_to_MKV.Checked) openSingle.Filter = "DAV|*.dav";
             if (openSingle.ShowDialog() == DialogResult.OK) files.Add(openSingle.FileName);
         }
 
@@ -66,25 +66,49 @@ namespace Remodeler_WinForm
         private void chbDeleteConverted_CheckedChanged(object sender, EventArgs e) { Settings.Default.inputDelete = chbDeleteConverted.Checked; Settings.Default.Save(); }
         private void bOutputSingle_Click(object sender, EventArgs e)
         {
-            this.Enabled = false;
-            if (files.Count <= 0 || Settings.Default.ffmpegPath.Length == 0) return;
-            string inputFile = files[lbFiles.SelectedIndex] ?? files[0];
-            if (!File.Exists(inputFile)) return;
-            string outputFile = Path.Combine(String.IsNullOrEmpty(tbOutput.Text) ? Path.GetDirectoryName(inputFile) : tbOutput.Text, Path.ChangeExtension(Path.GetFileName(inputFile), ".mp4"));
-            string exec = $"-i \"{inputFile}\" -c:v copy -c:a aac -strict experimental \"{outputFile}\"";
-            cmd.StartInfo.FileName = Settings.Default.ffmpegPath;
-            cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            cmd.StartInfo.Arguments = exec;
-            cmd.Start();
-            processRunning = true;
-            cmd.WaitForExit();
-            if (cmd.ExitCode == 0)
+            if (rbTS_to_MP4.Checked)
             {
-                MessageBox.Show($"{outputFile} successfully converted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                if (Settings.Default.inputDelete) { File.Delete(inputFile); files.Remove(inputFile); }
+                this.Enabled = false;
+                if (files.Count <= 0 || Settings.Default.ffmpegPath.Length == 0) return;
+                string inputFile = files[lbFiles.SelectedIndex] ?? files[0];
+                if (!File.Exists(inputFile)) return;
+                string outputFile = Path.Combine(String.IsNullOrEmpty(tbOutput.Text) ? Path.GetDirectoryName(inputFile) : tbOutput.Text, Path.ChangeExtension(Path.GetFileName(inputFile), ".mp4"));
+                string exec = $"-i \"{inputFile}\" -c:v copy -c:a aac -strict experimental \"{outputFile}\"";
+                cmd.StartInfo.FileName = Settings.Default.ffmpegPath;
+                cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                cmd.StartInfo.Arguments = exec;
+                cmd.Start();
+                processRunning = true;
+                cmd.WaitForExit();
+                if (cmd.ExitCode == 0)
+                {
+                    MessageBox.Show($"{outputFile} successfully converted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (Settings.Default.inputDelete) { File.Delete(inputFile); files.Remove(inputFile); }
+                }
+                this.Enabled = true;
+                processRunning = false;
             }
-            this.Enabled = true;
-            processRunning = false;
+            else if(rbDAV_to_MKV.Checked) {
+                this.Enabled = false;
+                if (files.Count <= 0 || Settings.Default.ffmpegPath.Length == 0) return;
+                string inputFile = files[lbFiles.SelectedIndex] ?? files[0];
+                if (!File.Exists(inputFile)) return;
+                string outputFile = Path.Combine(String.IsNullOrEmpty(tbOutput.Text) ? Path.GetDirectoryName(inputFile) : tbOutput.Text, Path.ChangeExtension(Path.GetFileName(inputFile), ".mkv"));
+                string exec = $"-i \"{inputFile}\" -c:v copy -c:a aac -strict experimental \"{outputFile}\"";
+                cmd.StartInfo.FileName = Settings.Default.ffmpegPath;
+                cmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                cmd.StartInfo.Arguments = exec;
+                cmd.Start();
+                processRunning = true;
+                cmd.WaitForExit();
+                if (cmd.ExitCode == 0)
+                {
+                    MessageBox.Show($"{outputFile} successfully converted.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    if (Settings.Default.inputDelete) { File.Delete(inputFile); files.Remove(inputFile); }
+                }
+                this.Enabled = true;
+                processRunning = false;
+            }
         }
 
         private void bOutputList_Click(object sender, EventArgs e)
