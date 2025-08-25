@@ -40,6 +40,10 @@
             bOutputList = new Button();
             bOutputSingle = new Button();
             chbDeleteConverted = new CheckBox();
+            rbTS_to_MP4 = new RadioButton();
+            rbDAV_to_MKV = new RadioButton();
+            gbModes = new GroupBox();
+            gbModes.SuspendLayout();
             SuspendLayout();
             // 
             // lFfmpeg
@@ -158,11 +162,45 @@
             chbDeleteConverted.UseVisualStyleBackColor = true;
             chbDeleteConverted.CheckedChanged += chbDeleteConverted_CheckedChanged;
             // 
+            // rbTS_to_MP4
+            // 
+            rbTS_to_MP4.Appearance = Appearance.Button;
+            rbTS_to_MP4.AutoSize = true;
+            rbTS_to_MP4.Checked = true;
+            rbTS_to_MP4.Location = new Point(65, 22);
+            rbTS_to_MP4.Name = "rbTS_to_MP4";
+            rbTS_to_MP4.Size = new Size(72, 25);
+            rbTS_to_MP4.TabIndex = 15;
+            rbTS_to_MP4.Text = "TS -> MP4";
+            rbTS_to_MP4.UseVisualStyleBackColor = true;
+            // 
+            // rbDAV_to_MKV
+            // 
+            rbDAV_to_MKV.Appearance = Appearance.Button;
+            rbDAV_to_MKV.AutoSize = true;
+            rbDAV_to_MKV.Location = new Point(143, 22);
+            rbDAV_to_MKV.Name = "rbDAV_to_MKV";
+            rbDAV_to_MKV.Size = new Size(83, 25);
+            rbDAV_to_MKV.TabIndex = 16;
+            rbDAV_to_MKV.Text = "DAV -> MKV";
+            rbDAV_to_MKV.UseVisualStyleBackColor = true;
+            // 
+            // gbModes
+            // 
+            gbModes.Controls.Add(rbDAV_to_MKV);
+            gbModes.Controls.Add(rbTS_to_MP4);
+            gbModes.Location = new Point(12, 445);
+            gbModes.Name = "gbModes";
+            gbModes.Size = new Size(283, 69);
+            gbModes.TabIndex = 17;
+            gbModes.TabStop = false;
+            gbModes.Text = "Modes";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(307, 450);
+            ClientSize = new Size(307, 526);
             Controls.Add(chbDeleteConverted);
             Controls.Add(bOutputList);
             Controls.Add(bOutputSingle);
@@ -175,6 +213,7 @@
             Controls.Add(tbFfmpeg);
             Controls.Add(bFfmpeg);
             Controls.Add(lFfmpeg);
+            Controls.Add(gbModes);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "Form1";
@@ -182,6 +221,8 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Remodeler";
             FormClosing += Form1_FormClosing;
+            gbModes.ResumeLayout(false);
+            gbModes.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -200,5 +241,8 @@
         private Button bOutputList;
         private Button bOutputSingle;
         private CheckBox chbDeleteConverted;
+        private RadioButton rbTS_to_MP4;
+        private RadioButton rbDAV_to_MKV;
+        private GroupBox gbModes;
     }
 }
